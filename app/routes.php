@@ -34,6 +34,7 @@ return function (App $app) {
     $app->options('/{routes:.*}', function (Request $request, Response $response) {
         return $response;
     });
+    //tout le monde
     $app->get('/', [AccueilController::class, 'home'])->setName('accueil');
     $app->get('/stage[/{page:\d+}]', [StageController::class, 'stage'])->setName('stage');
     $app->get('/entreprise[/{page:\d+}]', [EntrepriseController::class, 'entreprise'])->setName('entreprise');
@@ -43,8 +44,6 @@ return function (App $app) {
     $app->post('/connexion', [ConnexionController::class, 'connecter']);
     $app->get('/deconnexion', [ConnexionController::class, 'deconnecter'])->setName('deconnexion');
     $app->get('/offres/{nom}', [VoirOffresController::class, 'VoirOffres'])->setName('voir-offres');
-    $app->post('/avis/{id}', [AvisController::class, 'avis'])->setName('avis');
-    $app->get('/avis/{id}', [AvisController::class, 'afficher'])->setName('voir-avis');
 
     // Admin + Pilote
     $app->group('', function (RouteCollectorProxy $group) {
@@ -70,7 +69,7 @@ return function (App $app) {
         $group->post('/gestion_entreprises/supprimer/{id}', [GestionEntreprise::class, 'supprimer'])->setName('supprimer-entreprises');
     })->add(new RoleCheckMiddleware($factory, [Role::ADMIN, Role::PILOTE]));
 
-
+    //etudiant
     $app->group('', function (RouteCollectorProxy $group) {
         $group->get('/souhait[/{page:\d+}]', [SouhaitController::class, 'souhait'])->setName('souhait');
         $group->post('/souhait/ajouter/{id}', [SouhaitController::class, 'ajouter'])->setName('ajouter-souhait');
@@ -79,5 +78,7 @@ return function (App $app) {
         $group->post('/candidature/statut/{id}/{statut}', [CandidatureController::class, 'changerStatut'])->setName('changer-statut');
         $group->get('/postule/{id}', [PostuleController::class, 'afficher2'])->setName('postule');
         $group->post('/postule/{id}', [PostuleController::class, 'traiter']);
+        $group->post('/avis/{id}', [AvisController::class, 'avis'])->setName('avis');
+        $group->get('/avis/{id}', [AvisController::class, 'afficher'])->setName('voir-avis');
     })->add(new LoggedMiddleware($factory));
 };

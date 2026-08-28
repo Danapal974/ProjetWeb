@@ -20,20 +20,21 @@ class AvisController
     public function avis(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
 
-        $donnees = $request->getParsedBody();
+        $donnees = $request->getParsedBody(); //recup donne formulaire
         $commentaire = $donnees['commentaire'] ?? '';
         $note = (int)($donnees['note'] ?? 0);
-        $entrepriseId = (int)$args['id'];
+        $entrepriseId = (int)$args['id']; // recup id depuis url
 
 
         $avis = new Avis($commentaire, $note, $entrepriseId);
-        $this->em->persist($avis);
-        $this->em->flush();
+        $this->em->persist($avis); //prepare l'envoie
+        $this->em->flush(); // fait l'envoie
 
 
         return $response->withHeader('Location', '/entreprise')->withStatus(302);
     }
 
+    //affiche formulaire avis
     public function afficher(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $view = Twig::fromRequest($request);

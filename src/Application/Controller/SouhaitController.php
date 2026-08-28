@@ -19,6 +19,7 @@ class SouhaitController
         $this->em = $em;
     }
 
+    // Affiche la liste des souhaits de l'utilisateur
     public function souhait(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $view = Twig::fromRequest($request);
@@ -32,14 +33,14 @@ class SouhaitController
 
         $total = $repository->createQueryBuilder('s')
             ->select('COUNT(s.id)')
-            ->where('s.utilisateur = :user') // AJOUT : Filtre sur la colonne utilisateur
-            ->setParameter('user', $user)    // AJOUT : Liaison avec l'objet user connecté
+            ->where('s.utilisateur = :user')
+            ->setParameter('user', $user)
             ->getQuery()
             ->getSingleScalarResult();
 
         $souhaits = $repository->createQueryBuilder('s')
-            ->where('s.utilisateur = :user') // AJOUT : Même filtre ici
-            ->setParameter('user', $user)    // AJOUT
+            ->where('s.utilisateur = :user')
+            ->setParameter('user', $user)
             ->orderBy('s.id', 'DESC')
             ->setFirstResult($offset)
             ->setMaxResults($parPage)
@@ -63,7 +64,7 @@ class SouhaitController
         $user = $request->getAttribute('user');
 
         if ($offre && $user) {
-            $dejaSouhaite = $this->em->getRepository(Souhait::class)->findOneBy([
+            $dejaSouhaite = $this->em->getRepository(Souhait::class)->findOneBy([ // Vérifie si déjà dans les souhaits
                 'utilisateur' => $user,
                 'nom' => $offre->getNom()
             ]);

@@ -19,14 +19,16 @@ class PostuleController
         $this->em = $em;
     }
 
+    // Affiche le formulaire de candidature
     public function afficher2(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $view = Twig::fromRequest($request);
-        // On récupère l'ID de l'offre pour l'envoyer à la vue (pour le bouton submit)
-        $idOffre = $args['id'] ?? null;
+        // On récupère l'ID de l'offre 
+        $idOffre = $args['id'] ?? null; //operateur coalescence
         $user = $request->getAttribute('user');
         $offre = $this->em->find(Offres::class, (int)$idOffre);
 
+        // Vérifie si l'utilisateur a déjà postulé à cette offre
         $dejaPostule = $this->em->getRepository(Candidature::class)->findOneBy([
             'utilisateur' => $user,
             'nom' => $offre->getNom()
@@ -41,6 +43,7 @@ class PostuleController
         ]);
     }
 
+    // Traite le formulaire et enregistre la candidature
     public function traiter(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $data = $request->getParsedBody();
@@ -48,7 +51,7 @@ class PostuleController
         $idOffre = (int)$args['id'];
         $user = $request->getAttribute('user');
 
-        // Nettoyage des données
+        // Nettoyage des données protection contre caracteres html
         $prenom      = htmlspecialchars($data['prenom']      ?? '', ENT_QUOTES, 'UTF-8');
         $nom         = htmlspecialchars($data['nom']         ?? '', ENT_QUOTES, 'UTF-8');
         $email       = filter_var($data['email'] ?? '', FILTER_SANITIZE_EMAIL);
@@ -58,7 +61,7 @@ class PostuleController
         $error   = null;
         $success = null;
 
-        //validations probleme peut etre sur email mais a changer facon
+        //validations donnes
 
         if (preg_match("/[^A-Za-zÀ-ÿ\s-]/", $prenom)) {
             $error = "Votre prénom ne doit contenir que des lettres.";
@@ -82,14 +85,15 @@ class PostuleController
                     $error = "Fichier trop volumineux (max 2MB).";
                 } else {
                     $uploadDir = __DIR__ . '/../../../public/uploads/';
-                    if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
 
+                    // donne un nom aux fichier pour eviter ecrasement (envoie de deux memes fichiers par exemple)
                     $filename = uniqid() . "_" . basename($fichier->getClientFilename());
                     $fichier->moveTo($uploadDir . $filename);
 
-                    //enregistre dans la bdd
+                    //prends les info dans la bdd
                     $offre = $this->em->find(Offres::class, $idOffre);
 
+                    // verif si offre et user existe pour mettre offre dans ma candidature
                     if ($offre && $user) {
                         $candidature = new Candidature(
                             $offre->getNom(),

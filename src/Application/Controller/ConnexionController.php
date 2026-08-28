@@ -17,12 +17,14 @@ class ConnexionController
         $this->em = $em;
     }
 
+    // Affiche le formulaire de connexion
     public function afficher(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $view = Twig::fromRequest($request);
         return $view->render($response, 'page_connexion.html.twig', []);
     }
 
+    // Traite la tentative de connexion
     public function connecter(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $data = $request->getParsedBody();

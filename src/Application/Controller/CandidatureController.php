@@ -18,6 +18,7 @@ class CandidatureController
         $this->em = $em;
     }
 
+    // Affiche les candidatures selon le rôle de l'utilisateur
     public function candidature(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
 
@@ -26,6 +27,7 @@ class CandidatureController
         $roleConnecte = $userConnecte->getRole();
         $repository = $this->em->getRepository(Candidature::class);
 
+        //requete avec querybuilder
         $qb = $repository->createQueryBuilder('c')->join('c.utilisateur', 'u');
 
         if ($roleConnecte === Role::ETUDIANT) {
@@ -44,6 +46,7 @@ class CandidatureController
         ]);
     }
 
+    // chnage statut attente en accepte ou refuse
     public function changerStatut(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $id = (int)$args['id'];

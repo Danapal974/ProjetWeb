@@ -44,8 +44,8 @@ class Candidature
     #[Column(type: 'string', nullable: false)]
     private string $statut;
 
-    #[ManyToOne(targetEntity: Utilisateur::class)]
-    #[JoinColumn(nullable: false)]
+    #[ManyToOne(targetEntity: Utilisateur::class)] //cela permet d'avoir plusieurs candidatures pour un utilisateur
+    #[JoinColumn(nullable: false)] //permet d'avoir les id dans Utilisateurs
     private Utilisateur $utilisateur;
 
 
@@ -67,15 +67,17 @@ class Candidature
         $this->createdAt = new DateTimeImmutable('now');
     }
 
+
     public function getId(): int
     {
         return $this->id;
     }
-
+    //permet recup valeur
     public function getNom(): string
     {
         return $this->nom;
     }
+    //permet modif valeur
     public function setNom(string $nom): void
     {
         $this->nom = $nom;

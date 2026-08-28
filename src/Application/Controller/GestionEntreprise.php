@@ -18,6 +18,7 @@ class GestionEntreprise
         $this->em = $em;
     }
 
+    //pagination
     public function gestion_entreprises(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $view = Twig::fromRequest($request);
@@ -50,6 +51,7 @@ class GestionEntreprise
 
     public function ajoute(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
+        //recup donne et trim enleve espace inutile
         if ($request->getMethod() === 'POST') {
             $parsedBody = $request->getParsedBody();
             $nom = trim($parsedBody['nom'] ?? '');

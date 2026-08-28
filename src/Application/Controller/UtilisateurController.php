@@ -19,6 +19,7 @@ class UtilisateurController
         $this->em = $em;
     }
 
+    // Affiche la liste des utilisateurs
     public function gestion_utilisateurs(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $view = Twig::fromRequest($request);

@@ -10,9 +10,11 @@ use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\DBAL\Types\Types;
 
-#[Entity, Table(name: 'utilisateurs')]
+#[Entity, Table(name: 'utilisateurs')] // nom table
 class Utilisateur
 {
+
+    //propriete colonne
     #[Id, Column(type: 'integer'), GeneratedValue(strategy: 'AUTO')]
     private int $id;
 

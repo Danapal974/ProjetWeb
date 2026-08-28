@@ -52,7 +52,9 @@ class Avis
 
     public function setNote(string $note): void
     {
-        $this->note = $note;
+        if ($note <= 5) { // on vérifie si c'est bien entre 0 et 5
+            $this->note = $note;
+        }
     }
 
     public function getEntrepriseId(): string

@@ -34,7 +34,7 @@
     "slim/slim": "^4.10",
     "slim/twig-view": "^3.4",
     "symfony/cache": "7.4",
-    "symfony/var-exporter": "6.4"
+    "symfony/var-exporter": "8.1.10"
   },
   "require-dev": {
     "jangregor/phpstan-prophecy": "^1.0.0",
